@@ -12,7 +12,7 @@ mlflow_url = f'http://127.0.0.1:{MODEL_API_PORT}/invocations'
 payload = {
     "instances": [
         {
-            "text": "It's a happy day"
+            "text": ["It's a happy day", "stocks markets hit lowest in 30 years", "More money to build hospitals: says Trump"]
         }
     ]
 }

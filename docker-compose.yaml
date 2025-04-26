@@ -1,0 +1,51 @@
+services:
+  db:
+    build:
+      context: ./client_runtime/db
+    container_name: postgres-rss
+    restart: unless-stopped
+    env_file:
+      - .client.env
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./client_runtime/logs/db:/var/log/postgresql
+    command: >
+      postgres -c logging_collector=on -c log_directory='/var/log/postgresql' -c log_filename='postgres.log'
+
+  rss_reader:
+    build: ./client_runtime/rss_reader
+    container_name: rss_reader_ai
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file:
+      - .client.env
+    volumes:
+      - ./client_runtime/logs/rss_reader:/app/logs
+    networks:
+      - default
+      - external-network
+    
+
+  # web_server:
+  #   build: ./client_runtime/web_server
+  #   container_name: web_server
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - db
+  #     - rss_reader
+  #   env_file:
+  #     - .client.env
+  #   ports:
+  #     - "9500:9500"
+  #   volumes:
+  #     - ./client_runtime/logs/web_server:/app/logs
+
+volumes:
+  postgres_data:
+
+networks:
+  external-network:
+    external: true
