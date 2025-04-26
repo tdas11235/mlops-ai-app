@@ -3,9 +3,7 @@ from transformers import AutoTokenizer
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
-from tqdm import tqdm
 import mlflow
-import mlflow.pytorch
 from model import TinyBERTClassifier
 from data_loader import GetDataset
 from build_data import load_combined
@@ -71,7 +69,7 @@ def train():
                 python_model=SentimentModelWrapper(),
                 artifacts={"model_path": model_path}
             )
-            mlflow.register_model(f"runs:/{run.info.run_id}/model", "NewsSentiment")
+            mlflow.register_model(f"runs:/{run.info.run_id}/sentiment_model", "NewsSentiment")
         except Exception as e:
             mlflow.log_param("error", str(e))
             print(f"Training failed due to: {e}")

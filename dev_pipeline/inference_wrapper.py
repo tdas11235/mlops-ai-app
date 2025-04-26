@@ -14,7 +14,8 @@ class SentimentModelWrapper(mlflow.pyfunc.PythonModel):
         self.model.eval()
 
     def predict(self, context, model_input):
-        texts = model_input["text"]
+        texts = model_input["text"][0]
+        print(texts)
         encodings = self.tokenizer(
             texts,
             padding="max_length",
