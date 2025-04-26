@@ -2,7 +2,7 @@ DO
 $$
 BEGIN
    IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'mlops_app') THEN
-      CREATE DATABASE mlops_a4;
+      CREATE DATABASE mlops_app;
    END IF;
 END
 $$;
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS articles (
     publication_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     article_link TEXT NOT NULL,
     summary TEXT,
-    sentiment VARCHAR(20),
+    sentiment SMALLINT,
     tags JSONB,
     CONSTRAINT unique_title_pubtime UNIQUE (title, publication_timestamp)
 );

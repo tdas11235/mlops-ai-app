@@ -29,19 +29,33 @@ services:
       - external-network
     
 
-  # web_server:
-  #   build: ./client_runtime/web_server
-  #   container_name: web_server
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - db
-  #     - rss_reader
-  #   env_file:
-  #     - .client.env
-  #   ports:
-  #     - "9500:9500"
-  #   volumes:
-  #     - ./client_runtime/logs/web_server:/app/logs
+  backend:
+    build: ./client_runtime/backend
+    container_name: backend
+    restart: unless-stopped
+    depends_on:
+      - db
+      - rss_reader
+    env_file:
+      - .client.env
+    ports:
+      - "9500:9500"
+    volumes:
+      - ./client_runtime/logs/backend:/app/logs
+      - ./shared_data:/data
+  
+  frontend:
+    build: ./client_runtime/frontend
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - .client.env
+    ports:
+      - "9501:9501"
+    volumes:
+      - ./client_runtime/logs/frontend:/app/logs
 
 volumes:
   postgres_data:
