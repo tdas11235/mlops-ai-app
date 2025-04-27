@@ -235,7 +235,7 @@ services:
       _PIP_ADDITIONAL_REQUIREMENTS: ""
     user: "0:0"
     volumes:
-      - ${AIRFLOW_PROJ_DIR:-.}:/sources
+      - ./dev_pipeline/airflow_pipeline:/sources
 
   airflow-cli:
     <<: *airflow-common
