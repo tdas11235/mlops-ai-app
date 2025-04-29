@@ -296,6 +296,16 @@ services:
       - mlflow-tracking
     entrypoint: ["sh", "-c", "until curl -s http://mlflow-tracking:5000; do echo waiting for mlflow-tracking; sleep 2; done; python serve.py"]
 
+  model-proxy:
+    build:
+      context: ./dev_pipeline/proxy_server
+    ports:
+      - "8000:8000"
+    networks:
+      - external-network
+    depends_on:
+      - mlflow-model
+
 
 volumes:
   postgres-db-volume:

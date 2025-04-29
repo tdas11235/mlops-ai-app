@@ -3,10 +3,14 @@ import requests
 from datetime import date
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import time
+from streamlit_autorefresh import st_autorefresh
+
 
 API_URL = "http://backend:9500"
 
 st.set_page_config(page_title="News Sentiment", layout="wide")
+st_autorefresh(interval=600000, limit=None, key="autorefresh")
 st.title("News Sentiment Dashboard")
 
 st.sidebar.header("Filters")

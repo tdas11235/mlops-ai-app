@@ -15,7 +15,7 @@ IST = pytz.timezone("Asia/Kolkata")
 RSS_FEED_URL = os.getenv("RSS_FEED_URL")
 
 batch_size = 16
-model_api = "http://mlflow-model:5001/invocations"
+model_api = "http://model-proxy:8000/predict"
 headers = {'Content-Type': 'application/json'}
 
 

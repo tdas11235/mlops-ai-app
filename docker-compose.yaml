@@ -40,9 +40,13 @@ services:
       - .client.env
     ports:
       - "9500:9500"
+      - "9000:9000"
     volumes:
       - ./client_runtime/logs/backend:/app/logs
       - ./shared_data:/data
+    networks:
+      - default
+      - external-network
   
   frontend:
     build: ./client_runtime/frontend
