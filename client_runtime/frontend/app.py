@@ -9,9 +9,49 @@ from streamlit_autorefresh import st_autorefresh
 
 API_URL = "http://backend:9500"
 
+
+user_manual = """
+# 📰 News Sentiment Dashboard - User Manual
+
+1. 📅 **Date Filters**  
+   - 🕒 Use the **Start Date** and **End Date** selectors in the sidebar to choose the date range for news articles.  
+   - ⏰ Start Date sets the time to **00:00 hrs IST** of the selected date.  
+   - ⌛ End Date sets the time to **23:59 hrs IST** of the selected date.  
+
+2. 🎯 **Sentiment Filter**  
+   - 🎭 Filter news by sentiment:  
+     - **All**: Get all articles within the selected date range.  
+     - 😠 **Negative**, 😐 **Neutral**, 😊 **Positive** 
+
+3. 👁️ **View Modes**  
+   - 🗞️ **Articles**:  
+     - Each article appears as a **headline inside an expander**.  
+     - Click the expander to view:  
+       - 🗓️ Publishing date  
+       - 🔗 Link to full article  
+       - 🖼️ Image (if available)  
+       - 🧠 Sentiment is shown as a **highlighted radio button**  
+   - ☁️ **WordCloud**:  
+     - Visual representation of keywords from article summaries.  
+     - Color-coded by sentiment selected.  
+
+4. 🛠️ **Feedback**  
+   - 🧩 Adjust the sentiment classification if needed.  
+   - 👍 Just select the correct sentiment and click **Submit Feedback**.  
+   - 📊 Your feedback helps us **improve the model** continuously.  
+
+5. 🔄 **Auto-Refresh**  
+   - ⏱️ The dashboard auto-refreshes **every 10 minutes**  
+   - 🆕 Ensures you're always seeing fresh, up-to-date news.
+"""
+
+
 st.set_page_config(page_title="News Sentiment", layout="wide")
 st_autorefresh(interval=600000, limit=None, key="autorefresh")
 st.title("News Sentiment Dashboard")
+
+with st.expander("📘 How to Use This Dashboard"):
+    st.markdown(user_manual.replace('\n', '  \n'))  # Markdown line breaks
 
 st.sidebar.header("Filters")
 start_date = st.sidebar.date_input("Start Date", date.today())
