@@ -11,7 +11,10 @@ from airflow.exceptions import AirflowFailException
 import pandas as pd
 import includes.train as tr
 from includes.initdb import CREATE_FEEDBACK_TABLE
+from includes.config_mail import SENDER_EMAIL, SENDER_PASS, TO_EMAIL
 import os
+import smtplib
+from email.message import EmailMessage
 from datetime import datetime
 
 CSV_PATH = '/opt/airflow/shared_data/feedback.csv'
@@ -106,6 +109,27 @@ def update_processed_and_train(ti):
     tr.train(csv_path)
 
 
+def shoot_email(**kwargs):
+    ti = kwargs["ti"]
+    # set up smtp to gmails SMTP server
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    # start TLS encryption
+    server.starttls()
+    server.login(SENDER_EMAIL, SENDER_PASS)
+    # construct email
+    msg = EmailMessage()
+    msg['Subject'] = "Update on New Model"
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = TO_EMAIL
+    msg.set_content(
+        f"New model trained and version registered!")
+    # send email
+    server.send_message(msg)
+    # stop smtp
+    server.quit()
+    return True
+
+
 with DAG(
     dag_id='article_feedback_pipeline',
     default_args=default_args,
@@ -145,13 +169,19 @@ with DAG(
         python_callable=update_processed_and_train,
     )
 
+    shoot_task = PythonOperator(
+        task_id="shoot_email",
+        python_callable=shoot_email,
+        provide_context=True,
+    )
+
     skip_training = DummyOperator(task_id='skip_training')
     end = DummyOperator(
         task_id='end', trigger_rule='none_failed_min_one_success')
     
     create_feedback_table >> read_insert_task >> check_count_task
     check_count_task >> [prepare_training_data_task, skip_training]
-    prepare_training_data_task >> wait_for_mlflow_task >> train_and_update_task >> end
+    prepare_training_data_task >> wait_for_mlflow_task >> train_and_update_task >> shoot_task >> end
     skip_training >> end
 
     

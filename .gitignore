@@ -3,3 +3,4 @@ venv/
 ml*
 logs/
 *.env
+*config_mail.*

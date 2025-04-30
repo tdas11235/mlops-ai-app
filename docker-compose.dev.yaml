@@ -281,6 +281,7 @@ services:
       - ./dev_pipeline/mlruns:/app/mlruns
       - ./dev_pipeline/mlartifacts:/app/mlartifacts
       - ./dev_pipeline/artifacts:/app/artifacts
+      - ./dev_pipeline/tracking_server/logs:/app/logs
     networks:
       - default
       - external-network
@@ -294,6 +295,8 @@ services:
       - external-network
     depends_on:
       - mlflow-tracking
+    volumes:
+      - ./dev_pipeline/model_server/logs:/app/logs
     entrypoint: ["sh", "-c", "until curl -s http://mlflow-tracking:5000; do echo waiting for mlflow-tracking; sleep 2; done; python serve.py"]
 
   model-proxy:
@@ -305,6 +308,8 @@ services:
       - external-network
     depends_on:
       - mlflow-model
+    volumes:
+      - ./dev_pipeline/proxy_server/logs:/app/logs
 
 
 volumes:
