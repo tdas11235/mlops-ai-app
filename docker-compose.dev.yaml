@@ -80,7 +80,7 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
-      - .dev_pipeline/airflow_pipeline/init-scripts:/docker-entrypoint-initdb.d
+      - ./dev_pipeline/airflow_pipeline/init-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5433:5432"
     healthcheck:

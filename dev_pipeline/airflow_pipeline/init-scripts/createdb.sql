@@ -1,0 +1,1 @@
+CREATE DATABASE mlops_data;
