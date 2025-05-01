@@ -79,6 +79,30 @@ cd dev_pipeline/airflow_pipeline
 mkdir -p logs plugins
 ```
 
+Set up the ```.client.env``` file
+```bash
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=mlops_app
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+RSS_FEED_URL="https://www.thehindu.com/news/national/?service=rss"
+POLL_INTERVAL=600
+GRACE_TOL=120
+```
+
+Set up the ```.env``` file
+```bash
+AIRFLOW_UID=1000
+``` 
+
+Set up the ```./dev_pipeline/airflow_pipeline/dags/includes/config_mail.py``` file
+```bash
+SENDER_EMAIL = ''
+SENDER_PASS = ''
+TO_EMAIL = ''
+```
+
 Build and start the docker containers (for the first time)
 ```bash
 docker compose -f docker-compose.dev.yaml up -d --build && \
