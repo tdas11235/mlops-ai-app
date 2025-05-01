@@ -1,6 +1,15 @@
 from datasets import load_dataset
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
+
+def save_to_csv(texts, labels, csv_path="combined_dataset.csv"):
+    if len(texts) != len(labels):
+        raise ValueError("Lengths of texts and labels must match.")
+
+    df = pd.DataFrame({'text': texts, 'label': labels})
+    df.to_csv(csv_path, index=False)
+    print(f"Saved dataset with {len(df)} samples to {csv_path}")
 
 def map_sentiment140_label(label):
     return 0 if label == 0 else 2
@@ -25,3 +34,7 @@ def load_combined(random_state=42):
     print("Label counts:", {i: labels.count(i) for i in set(labels)})
     return texts, labels
 
+
+if __name__ == "__main__":
+    texts, labels = load_combined()
+    save_to_csv(texts, labels)
